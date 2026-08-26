@@ -1,3 +1,4 @@
+import { log } from "node:console";
 import { randomUUID } from "node:crypto";
 
 interface UserDTO {
@@ -7,6 +8,15 @@ interface UserDTO {
   adm: boolean;
   login: string;
   password: string;
+}
+
+interface UpdateUserDTO {
+  name?: string;
+  email?: string;
+  address?: string;
+  adm?: boolean;
+  login?: string;
+  password?: string;
 }
 
 const users: Array<{
@@ -72,5 +82,23 @@ export class UserService {
 
     users.splice(userPosition, 1);
     return users;
+  }
+
+  async updateUser(data: UpdateUserDTO, id: string) {
+    const userPosition = users.findIndex((user) => user.id === id);
+    const currentUser = users[userPosition];
+
+    const updatedUser = {
+      ...currentUser,
+      ...data,
+    };
+
+    if (userPosition === -1) {
+      throw new Error("User does not exist");
+    }
+
+    users[userPosition] = updatedUser;
+
+    return updatedUser;
   }
 }
