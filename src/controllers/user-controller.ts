@@ -15,6 +15,16 @@ interface DeleteUserParams {
   id: string;
 }
 
+interface UpdateUserParams {
+  id: string;
+  name?: string;
+  email?: string;
+  address?: string;
+  adm?: boolean;
+  login?: string;
+  password?: string;
+}
+
 export class UserController {
   private userService: UserService;
 
@@ -60,7 +70,28 @@ export class UserController {
       await this.userService.deleteUser(id);
       return reply.status(200).send("User Deleted Sucessfully");
     } catch (error) {
-      if (error instanceof Error && error.message == "User Does Not Exist") {
+      if (error instanceof Error && error.message == "User does not exist") {
+        return reply.status(404).send({
+          message: error.message,
+        });
+      }
+
+      return reply.status(500).send({
+        message: "Internal Server Error",
+      });
+    }
+  }
+
+  async updateUser(
+    request: FastifyRequest<{ Body: UpdateUserParams }>,
+    reply: FastifyReply,
+  ) {
+    try {
+      const data = request.body;
+      await this.userService.updateUser(data, data.id);
+      return reply.status(200).send("User Updated Sucessfully");
+    } catch (error) {
+      if (error instanceof Error && error.message == "User does not exist") {
         return reply.status(404).send({
           message: error.message,
         });
