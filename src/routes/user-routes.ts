@@ -5,8 +5,6 @@ import { UserController } from "../controllers/user-controller.js"
 const userController = new UserController();
 
 export async function routes(app: FastifyTypedInstanc) {
-  const users = [];
-
   app.get("/user", () => {
     userController.list.bind(userController)
   });
