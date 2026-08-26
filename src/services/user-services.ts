@@ -1,30 +1,76 @@
-import {randomUUID} from "node:crypto"
+import { randomUUID } from "node:crypto";
 
-interface CreateUserDTO {
-    name: string
-    email: string
+interface UserDTO {
+  name: string;
+  email: string;
+  address: string;
+  adm: boolean;
+  login: string;
+  password: string;
 }
 
-const users: Array <{id: string; name: string; email: string}> = []
+const users: Array<{
+  id: string;
+  name: string;
+  email: string;
+  address: string;
+  adm: boolean;
+  login: string;
+  password: string;
+}> = [
+  {
+    id: randomUUID(),
+    name: "João",
+    email: "joao@teste.org.com",
+    address: "saasdfasdfasdf",
+    adm: false,
+    login: "asdfasdfasdfasdf",
+    password: "asdasdfasdf",
+  },
+  {
+    id: randomUUID(),
+    name: "maria",
+    email: "maria@teste.org.com",
+    address: "saasdfasdfasdf",
+    adm: false,
+    login: "asdfasdfasdfasdf",
+    password: "asdasdfasdf",
+  },
+];
 
 export class UserService {
-        async executeCreate ({name,email}: CreateUserDTO){
-            const userAlreadyExists = users.find ((user) => user.email === email)
-            if (userAlreadyExists){
-                throw new Error ("User already existes")
-            }
+  async executeCreate({ name, email, address, adm, login, password }: UserDTO) {
+    const userAlreadyExists = users.find((user) => user.email === email);
+    if (userAlreadyExists) {
+      throw new Error("User already existes");
+    }
 
-            const user = {
-                id: randomUUID(),
-                name,
-                email,
-            }
+    const user = {
+      id: randomUUID(),
+      name,
+      email,
+      address,
+      adm,
+      login,
+      password,
+    };
 
-            users.push (user)
-            return user;
-        }
-        
-        async executeList (){
-            return users
-        }
+    users.push(user);
+    return users;
+  }
+
+  async executeList() {
+    return users;
+  }
+
+  async deleteUser(id: string) {
+    const userPosition = users.findIndex((user) => user.id === id);
+
+    if (userPosition === -1) {
+      throw new Error("User does not exist");
+    }
+
+    users.splice(userPosition, 1);
+    return users;
+  }
 }

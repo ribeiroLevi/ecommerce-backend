@@ -1,16 +1,43 @@
-import {z} from "zod"
-import { FastifyTypedInstanc } from "../types.js"
-import { UserController } from "../controllers/user-controller.js"
+import { z } from "zod";
+import { FastifyTypedInstanc } from "../types.js";
+import { UserController } from "../controllers/user-controller.js";
+import { request } from "node:http";
 
 const userController = new UserController();
 
 export async function routes(app: FastifyTypedInstanc) {
-  app.get("/user", () => {
-    userController.list.bind(userController)
-  });
+  app.get(
+    "/listusers",
+    {
+      schema: {
+        tags: ["users"],
+        description: "Listagem de Usuários",
+      },
+    },
+    (request, reply) => {
+      return userController.listUser(request, reply);
+    },
+  );
+
+  app.delete(
+    "/deleteuser",
+    {
+      schema: {
+        tags: ["user"],
+        description: "Deleção de Usuários",
+        body: z.object({ id: z.uuid() }),
+        response: {
+          200: z.object({
+            id: z.string(),
+          }),
+        },
+      },
+    },
+    (request, reply) => userController.deleteUser(request, reply),
+  );
 
   app.post(
-    "/user",
+    "/createuser",
     {
       schema: {
         tags: ["users"],
@@ -18,19 +45,22 @@ export async function routes(app: FastifyTypedInstanc) {
         body: z.object({
           name: z.string(),
           email: z.email(),
+          address: z.string(),
+          login: z.string(),
+          password: z.string(),
+          adm: z.boolean(),
         }),
-        response:{
+        response: {
           201: z.object({
-            id: z.uuid,
-            name: z.string,
-            email: z.email
+            id: z.uuid(),
+            name: z.string(),
           }),
           409: z.object({
-            message: z.string()
-          })
+            message: z.string(),
+          }),
         },
       },
     },
-    userController.create.bind(userController)
+    userController.createUser.bind(userController),
   );
 }
