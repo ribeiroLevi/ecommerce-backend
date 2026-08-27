@@ -51,12 +51,18 @@ const users: Array<{
 
 export class UserService {
   async executeCreate({ name, email, address, adm, login, password }: UserDTO) {
-    const userAlreadyExists = users.find(
+    const tempUser = users.find(
       (user) => user.email === email || user.login === login,
     );
 
-    if (userAlreadyExists) {
-      throw new Error("User already exists");
+    if (tempUser) {
+      if (tempUser.email == email) {
+        throw new Error("Email already in use");
+      } else if (tempUser.login === login) {
+        throw new Error("Username already in use");
+      } else {
+        throw new Error("User already exists");
+      }
     }
 
     const passwordHash = await argon2.hash(password);
