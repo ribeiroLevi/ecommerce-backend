@@ -34,7 +34,7 @@ const users: Array<{
     email: "joao@teste.org.com",
     address: "saasdfasdfasdf",
     adm: false,
-    login: "asdfasdfasdfasdf",
+    login: "joao",
     password: "asdasdfasdf",
   },
   {
@@ -43,7 +43,7 @@ const users: Array<{
     email: "maria@teste.org.com",
     address: "saasdfasdfasdf",
     adm: false,
-    login: "asdfasdfasdfasdf",
+    login: "maria",
     password: "asdasdfasdf",
   },
 ];
@@ -82,6 +82,18 @@ export class UserService {
 
     users.splice(userPosition, 1);
     return users;
+  }
+
+  async findUser(login: string) {
+    const userPosition = users.findIndex((user) => user.login === login);
+
+    if (userPosition === -1) {
+      throw new Error("User does not exist");
+    }
+
+    const currentUser = users[userPosition];
+
+    return currentUser;
   }
 
   async updateUser(data: UpdateUserDTO, id: string) {

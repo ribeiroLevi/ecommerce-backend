@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { string, z } from "zod";
 import { FastifyTypedInstanc } from "../types.js";
 import { UserController } from "../controllers/user-controller.js";
 import { request } from "node:http";
@@ -20,13 +20,32 @@ export async function routes(app: FastifyTypedInstanc) {
     },
   );
 
+  app.get(
+    "/user/:login",
+    {
+      schema: {
+        tags: ["users"],
+        description: "Busca um usuário",
+        params: z.object({ login: z.string() }),
+        response: {
+          200: z.object({
+            id: string(),
+          }),
+        },
+      },
+    },
+    (request, reply) => {
+      return userController.findUser(request, reply);
+    },
+  );
+
   app.delete(
-    "/user:id",
+    "/user/:id",
     {
       schema: {
         tags: ["users"],
         description: "Deleção de Usuários",
-        body: z.object({ id: z.uuid() }),
+        params: z.object({ id: z.uuid() }),
         response: {
           200: z.object({
             id: z.string(),
