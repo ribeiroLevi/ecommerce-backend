@@ -1,6 +1,5 @@
 import { FastifyRequest, FastifyReply } from "fastify";
 import { UserService } from "../services/user-services.js";
-import { ca } from "zod/locales";
 
 interface CreateUserBody {
   name: string;
@@ -65,7 +64,7 @@ export class UserController {
     }
   }
 
-  async listUser(request: FastifyRequest, reply: FastifyReply) {
+  async listUser(reply: FastifyReply) {
     const users = await this.userService.executeList();
     return reply.status(200).send(users);
   }
