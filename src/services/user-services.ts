@@ -1,5 +1,6 @@
 import { log } from "node:console";
 import { randomUUID } from "node:crypto";
+import argon2 from "argon2";
 
 interface UserDTO {
   name: string;
@@ -58,6 +59,8 @@ export class UserService {
       throw new Error("User already exists");
     }
 
+    const passwordHash = await argon2.hash(password);
+
     const user = {
       id: randomUUID(),
       name,
@@ -65,7 +68,7 @@ export class UserService {
       address,
       adm,
       login,
-      password,
+      password: passwordHash,
     };
 
     users.push(user);
