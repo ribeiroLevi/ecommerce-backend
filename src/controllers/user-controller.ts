@@ -42,6 +42,7 @@ export class UserController {
   ) {
     try {
       const { name, email, address, adm, login, password } = request.body;
+
       const user = await this.userService.executeCreate({
         name,
         email,

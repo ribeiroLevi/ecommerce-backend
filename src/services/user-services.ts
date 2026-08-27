@@ -50,9 +50,12 @@ const users: Array<{
 
 export class UserService {
   async executeCreate({ name, email, address, adm, login, password }: UserDTO) {
-    const userAlreadyExists = users.find((user) => user.email === email);
+    const userAlreadyExists = users.find(
+      (user) => user.email === email || user.login === login,
+    );
+
     if (userAlreadyExists) {
-      throw new Error("User already existes");
+      throw new Error("User already exists");
     }
 
     const user = {
@@ -66,7 +69,7 @@ export class UserService {
     };
 
     users.push(user);
-    return users;
+    return user;
   }
 
   async executeList() {
