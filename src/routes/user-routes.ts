@@ -8,7 +8,7 @@ const userController = new UserController();
 
 export async function routes(app: FastifyTypedInstanc) {
   app.get(
-    "/listusers",
+    "/user",
     {
       schema: {
         tags: ["users"],
@@ -21,10 +21,10 @@ export async function routes(app: FastifyTypedInstanc) {
   );
 
   app.delete(
-    "/deleteuser",
+    "/user:id",
     {
       schema: {
-        tags: ["user"],
+        tags: ["users"],
         description: "Deleção de Usuários",
         body: z.object({ id: z.uuid() }),
         response: {
@@ -38,10 +38,10 @@ export async function routes(app: FastifyTypedInstanc) {
   );
 
   app.patch(
-    "/updateuser",
+    "/user:id",
     {
       schema: {
-        tags: ["user"],
+        tags: ["users"],
         description: "Atualização de Usuários",
         body: z.object({
           id: z.uuid(),
@@ -63,7 +63,7 @@ export async function routes(app: FastifyTypedInstanc) {
   );
 
   app.post(
-    "/createuser",
+    "/user",
     {
       schema: {
         tags: ["users"],
