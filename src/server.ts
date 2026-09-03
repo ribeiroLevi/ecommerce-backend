@@ -8,7 +8,7 @@ import {
 } from "fastify-type-provider-zod";
 import { fastifySwagger } from "@fastify/swagger";
 import fastifySwaggerUi from "@fastify/swagger-ui";
-import { routes } from "./routes/user-routes.js";
+import { userRoutes } from "./routes/user-routes.js";
 
 const app = fastify().withTypeProvider<ZodTypeProvider>();
 
@@ -37,7 +37,7 @@ app.get("/", () => {
   return "Hello World!";
 });
 
-app.register(routes);
+app.register(userRoutes);
 
 app.ready().then(() => {
   console.log(JSON.stringify(app.swagger(), null, 2));

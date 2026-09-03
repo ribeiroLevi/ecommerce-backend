@@ -2,6 +2,8 @@ import { log } from "node:console";
 import { randomUUID } from "node:crypto";
 import argon2 from "argon2";
 
+import { users } from "../database/users.js";
+
 interface UserDTO {
   name: string;
   email: string;
@@ -19,35 +21,6 @@ interface UpdateUserDTO {
   login?: string;
   password?: string;
 }
-
-const users: Array<{
-  id: string;
-  name: string;
-  email: string;
-  address: string;
-  adm: boolean;
-  login: string;
-  password: string;
-}> = [
-  {
-    id: randomUUID(),
-    name: "João",
-    email: "joao@teste.org.com",
-    address: "saasdfasdfasdf",
-    adm: false,
-    login: "joao",
-    password: "asdasdfasdf",
-  },
-  {
-    id: randomUUID(),
-    name: "maria",
-    email: "maria@teste.org.com",
-    address: "saasdfasdfasdf",
-    adm: false,
-    login: "maria",
-    password: "asdasdfasdf",
-  },
-];
 
 export class UserService {
   async executeCreate({ name, email, address, adm, login, password }: UserDTO) {
