@@ -1,6 +1,5 @@
-import { id } from "zod/locales";
 import { FastifyTypedInstanc } from "../types.js";
-import { string, z } from "zod";
+import { z } from "zod";
 import { AuthController } from "../controllers/auth-controller.js";
 
 const authController = new AuthController();
@@ -19,7 +18,7 @@ export async function authRoutes(app: FastifyTypedInstanc) {
         response: {
           200: z.object({
             id: z.string(),
-            name: z.string(),
+            login: z.string(),
             adm: z.boolean(),
           }),
           401: z.object({
