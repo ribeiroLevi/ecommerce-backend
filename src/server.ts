@@ -8,7 +8,7 @@ import {
 } from "fastify-type-provider-zod";
 import { fastifySwagger } from "@fastify/swagger";
 import fastifySwaggerUi from "@fastify/swagger-ui";
-import { routes } from "./routes.js";
+import { routes } from "./routes/user-routes.js";
 
 const app = fastify().withTypeProvider<ZodTypeProvider>();
 
@@ -19,6 +19,7 @@ app.register(fastifyCors, { origin: "*" });
 
 app.register(fastifySwagger, {
   openapi: {
+    openapi: "3.0.3",
     info: {
       title: "Ecommerce Web 123",
       version: "0.0.1",
@@ -37,6 +38,10 @@ app.get("/", () => {
 });
 
 app.register(routes);
+
+app.ready().then(() => {
+  console.log(JSON.stringify(app.swagger(), null, 2));
+});
 
 //porta da API
 app.listen({ port: 3333 }).then(() => {
