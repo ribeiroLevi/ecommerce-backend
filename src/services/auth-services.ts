@@ -13,6 +13,7 @@ export class AuthService {
     if (!tempUser) {
       throw new Error("Wrong Credentials");
     }
+
     const isPasswordCorrect = await argon2.verify(tempUser.password, password);
 
     if (isPasswordCorrect) {

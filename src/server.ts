@@ -9,6 +9,7 @@ import {
 import { fastifySwagger } from "@fastify/swagger";
 import fastifySwaggerUi from "@fastify/swagger-ui";
 import { userRoutes } from "./routes/user-routes.js";
+import { authRoutes } from "./routes/auth-routes.js";
 
 const app = fastify().withTypeProvider<ZodTypeProvider>();
 
@@ -38,6 +39,7 @@ app.get("/", () => {
 });
 
 app.register(userRoutes);
+app.register(authRoutes);
 
 app.ready().then(() => {
   console.log(JSON.stringify(app.swagger(), null, 2));
