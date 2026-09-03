@@ -1,6 +1,6 @@
 import { string, z } from "zod";
 import { FastifyTypedInstanc } from "../types.js";
-import { UserController } from "../controllers/user-controller.js";
+import { UserController } from "../controllers/user-controller.js"; 
 
 const userController = new UserController();
 
@@ -14,7 +14,7 @@ export async function routes(app: FastifyTypedInstanc) {
       },
     },
     (request, reply) => {
-      return userController.listUser(reply);
+      return userController.listUser(request, reply);
     },
   );
 

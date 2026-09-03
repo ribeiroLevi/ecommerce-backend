@@ -64,7 +64,7 @@ export class UserController {
     }
   }
 
-  async listUser(reply: FastifyReply) {
+  async listUser(request: FastifyRequest, reply: FastifyReply) {
     const users = await this.userService.executeList();
     return reply.status(200).send(users);
   }
