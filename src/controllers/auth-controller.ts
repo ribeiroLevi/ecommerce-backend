@@ -1,0 +1,74 @@
+import { FastifyReply, FastifyRequest } from "fastify";
+import { fastifySession } from "@fastify/session";
+import { AuthService } from "../services/auth-services.js";
+
+interface ValidateUser {
+  login: string;
+  password: string;
+}
+
+export class AuthController {
+  private authService: AuthService;
+
+  constructor() {
+    this.authService = new AuthService();
+  }
+
+  async validateUser(
+    request: FastifyRequest<{ Body: ValidateUser }>,
+    reply: FastifyReply,
+  ) {
+    try {
+      const login = request.body.login;
+      const password = request.body.password;
+
+      const user = await this.authService.executeValidate({
+        login,
+        password,
+      });
+
+      request.session.userId = user.id;
+
+      return reply.status(200).send(user);
+    } catch (error) {
+      if (error instanceof Error && error.message === "Wrong Credentials") {
+        return reply.status(401).send({ message: error.message });
+      }
+      return reply.status(500).send({ message: "Internal Server Error" });
+    }
+  }
+
+  async logoutUser(request: FastifyRequest, reply: FastifyReply) {
+    await request.session.destroy();
+
+    return reply.status(204).send();
+  }
+
+  async currentUser(request: FastifyRequest, reply: FastifyReply) {
+    try {
+      const userId = request.session.userId;
+
+      if (!userId) {
+        return reply.status(401).send({
+          message: "Unauthorized",
+        });
+      }
+
+      const user = await this.authService.executeGetUser(userId);
+
+      return reply.status(200).send(user);
+    } catch (error) {
+      console.error(error);
+
+      if (error instanceof Error && error.message === "Wrong Credentials") {
+        return reply.status(401).send({
+          message: error.message,
+        });
+      }
+
+      return reply.status(500).send({
+        message: "Internal Server Error",
+      });
+    }
+  }
+}
