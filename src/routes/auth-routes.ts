@@ -35,7 +35,8 @@ export async function authRoutes(app: FastifyTypedInstanc) {
     {
       schema: {
         tags: ["auth"],
-        description: "Retorno o ID do usuário atual na sessão",
+        description:
+          "Retorno o ID do usuário atual na sessão a partir de Cookie de sessão",
         response: {
           200: z.object({
             id: z.string(),
