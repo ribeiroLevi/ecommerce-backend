@@ -48,7 +48,7 @@ export class AuthController {
         });
       }
 
-      const user = this.authService.executeGetUser(userId);
+      const user = await this.authService.executeGetUser(userId);
 
       return reply.status(200).send(user);
     } catch (error) {
