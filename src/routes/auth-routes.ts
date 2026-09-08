@@ -1,4 +1,4 @@
-import { FastifyTypedInstanc } from "../types.js";
+import { FastifyTypedInstanc } from "../types/fastify.js";
 import { z } from "zod";
 import { AuthController } from "../controllers/auth-controller.js";
 

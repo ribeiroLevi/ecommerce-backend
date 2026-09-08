@@ -1,5 +1,5 @@
 import { string, z } from "zod";
-import { FastifyTypedInstanc } from "../types.js";
+import { FastifyTypedInstanc } from "../types/fastify.js";
 import { UserController } from "../controllers/user-controller.js";
 
 const userController = new UserController();

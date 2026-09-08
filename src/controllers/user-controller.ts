@@ -1,32 +1,11 @@
 import { FastifyRequest, FastifyReply } from "fastify";
 import { UserService } from "../services/user-services.js";
-
-interface CreateUserBody {
-  name: string;
-  email: string;
-  address: string;
-  adm: boolean;
-  login: string;
-  password: string;
-}
-
-interface DeleteUserParams {
-  id: string;
-}
-
-interface FindUserParams {
-  login: string;
-}
-
-interface UpdateUserParams {
-  id: string;
-  name?: string;
-  email?: string;
-  address?: string;
-  adm?: boolean;
-  login?: string;
-  password?: string;
-}
+import {
+  CreateUserBody,
+  DeleteUserParams,
+  FindUserParams,
+  UpdateUserParams,
+} from "../types/user.js";
 
 export class UserController {
   private userService: UserService;

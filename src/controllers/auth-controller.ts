@@ -1,11 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { fastifySession } from "@fastify/session";
 import { AuthService } from "../services/auth-services.js";
-
-interface ValidateUser {
-  login: string;
-  password: string;
-}
+import { ValidateUser } from "../types/auth.js";
 
 export class AuthController {
   private authService: AuthService;
