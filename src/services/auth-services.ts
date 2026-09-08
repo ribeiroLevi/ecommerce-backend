@@ -21,4 +21,18 @@ export class AuthService {
     }
     throw new Error("Wrong Credentials");
   }
+
+  async executeGetUser(userId: string) {
+    const user = users.find((user) => user.id === userId);
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    return {
+      id: user.id,
+      login: user.login,
+      adm: user.adm,
+    };
+  }
 }

@@ -37,4 +37,32 @@ export class AuthController {
       return reply.status(500).send({ message: "Internal Server Error" });
     }
   }
+
+  async currentUser(request: FastifyRequest, reply: FastifyReply) {
+    try {
+      const userId = request.session.userId;
+
+      if (!userId) {
+        return reply.status(401).send({
+          message: "Unauthorized",
+        });
+      }
+
+      const user = this.authService.executeGetUser(userId);
+
+      return reply.status(200).send(user);
+    } catch (error) {
+      console.error(error);
+
+      if (error instanceof Error && error.message === "Wrong Credentials") {
+        return reply.status(401).send({
+          message: error.message,
+        });
+      }
+
+      return reply.status(500).send({
+        message: "Internal Server Error",
+      });
+    }
+  }
 }

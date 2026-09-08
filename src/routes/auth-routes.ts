@@ -29,4 +29,25 @@ export async function authRoutes(app: FastifyTypedInstanc) {
     },
     authController.validateUser.bind(authController),
   );
+
+  app.get(
+    "/auth/me",
+    {
+      schema: {
+        tags: ["auth"],
+        description: "Retorno o ID do usuário atual na sessão",
+        response: {
+          200: z.object({
+            id: z.string(),
+            //login: z.string(),
+            //adm: z.boolean(),
+          }),
+          401: z.object({
+            message: z.string(),
+          }),
+        },
+      },
+    },
+    authController.currentUser.bind(authController),
+  );
 }
