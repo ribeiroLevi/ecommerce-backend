@@ -1,4 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify";
+import { fastifySession } from "@fastify/session";
 import { AuthService } from "../services/auth-services.js";
 
 interface ValidateUser {
@@ -25,6 +26,8 @@ export class AuthController {
         login,
         password,
       });
+
+      request.session.userId = user.id;
 
       return reply.status(200).send(user);
     } catch (error) {
