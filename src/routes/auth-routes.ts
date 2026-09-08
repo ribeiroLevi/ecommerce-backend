@@ -51,4 +51,15 @@ export async function authRoutes(app: FastifyTypedInstanc) {
     },
     authController.currentUser.bind(authController),
   );
+
+  app.post(
+    "/auth/logout",
+    {
+      schema: {
+        tags: ["auth"],
+        description: "Destrói a sessão do usuário atual",
+      },
+    },
+    authController.logoutUser.bind(authController),
+  );
 }

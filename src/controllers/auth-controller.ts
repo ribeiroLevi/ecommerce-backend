@@ -38,6 +38,12 @@ export class AuthController {
     }
   }
 
+  async logoutUser(request: FastifyRequest, reply: FastifyReply) {
+    await request.session.destroy();
+
+    return reply.status(204).send();
+  }
+
   async currentUser(request: FastifyRequest, reply: FastifyReply) {
     try {
       const userId = request.session.userId;
