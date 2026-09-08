@@ -34,7 +34,7 @@ app.register(fastifySwagger, {
     openapi: "3.0.3",
     info: {
       title: "Eccomerce",
-      version: "0.0.2",
+      version: "0.0.3",
     },
   },
   transform: jsonSchemaTransform,
