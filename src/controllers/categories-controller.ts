@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { CategoriesService } from "../services/categories-services.js";
-import { CreateCategory } from "../types/categories.js";
+import { CreateCategory, DeleterCategoryParams } from "../types/categories.js";
 
 export class CategoryController {
   private categoriesService: CategoriesService;
@@ -37,5 +37,28 @@ export class CategoryController {
   async listCategories(request: FastifyRequest, reply: FastifyReply) {
     const categories = await this.categoriesService.executeListCategories();
     return reply.status(200).send(categories);
+  }
+
+  async deleteCategory(
+    request: FastifyRequest<{ Params: DeleterCategoryParams }>,
+    reply: FastifyReply,
+  ) {
+    try {
+      const { id } = request.params;
+      await this.categoriesService.deleteCategory(id);
+      return reply.status(200).send("Category Deleted Sucessfully");
+    } catch (error) {
+      if (
+        error instanceof Error &&
+        error.message === "Category does not exist"
+      ) {
+        return reply.status(404).send({
+          message: error.message,
+        });
+      }
+      return reply.status(500).send({
+        message: "Internal Server Error",
+      });
+    }
   }
 }

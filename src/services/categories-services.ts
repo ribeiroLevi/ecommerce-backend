@@ -32,4 +32,17 @@ export class CategoriesService {
   async executeListCategories() {
     return categories;
   }
+
+  async deleteCategory(id: string) {
+    const categoryPosition = categories.findIndex(
+      (category) => category.id === id,
+    );
+
+    if (categoryPosition === -1) {
+      throw new Error("Category does not exist");
+    }
+
+    categories.splice(categoryPosition, 1);
+    return categories;
+  }
 }
