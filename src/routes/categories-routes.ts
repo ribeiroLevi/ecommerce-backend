@@ -2,10 +2,24 @@ import { request } from "node:http";
 import { string, z } from "zod";
 import { CategoryController } from "../controllers/categories-controller.js";
 import { FastifyTypedInstanc } from "../types/fastify.js";
+import { Schema } from "zod/v3";
 
 const categoryController = new CategoryController();
 
-export async function categorieRoutes(app: FastifyTypedInstanc) {
+export async function categoryRoutes(app: FastifyTypedInstanc) {
+  app.get(
+    "/category",
+    {
+      schema: {
+        tags: ["category"],
+        description: "Lista as Categorias Disponíveis",
+      },
+    },
+    (request, reply) => {
+      return categoryController.listCategories(request, reply);
+    },
+  );
+
   app.post(
     "/category",
     {

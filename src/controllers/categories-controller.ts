@@ -33,4 +33,9 @@ export class CategoryController {
       }
     }
   }
+
+  async listCategories(request: FastifyRequest, reply: FastifyReply) {
+    const categories = await this.categoriesService.executeListCategories();
+    return reply.status(200).send(categories);
+  }
 }

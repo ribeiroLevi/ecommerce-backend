@@ -28,4 +28,8 @@ export class CategoriesService {
     categories.push(category);
     return category;
   }
+
+  async executeListCategories() {
+    return categories;
+  }
 }
