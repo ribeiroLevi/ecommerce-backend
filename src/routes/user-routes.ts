@@ -55,13 +55,15 @@ export async function userRoutes(app: FastifyTypedInstanc) {
   );
 
   app.patch(
-    "/user:id",
+    "/user/:id",
     {
       schema: {
         tags: ["users"],
         description: "Atualização de Usuários",
-        body: z.object({
+        params: z.object({
           id: z.uuid(),
+        }),
+        body: z.object({
           name: z.string().optional(),
           email: z.email().optional(),
           address: z.string().optional(),

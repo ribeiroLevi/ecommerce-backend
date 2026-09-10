@@ -16,7 +16,6 @@ export interface FindUserParams {
 }
 
 export interface UpdateUserParams {
-  id: string;
   name?: string;
   email?: string;
   address?: string;
@@ -41,4 +40,8 @@ export interface UpdateUserDTO {
   adm?: boolean;
   login?: string;
   password?: string;
+}
+
+export interface PatchIdParams {
+  id: string;
 }

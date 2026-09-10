@@ -1,6 +1,10 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { CategoriesService } from "../services/categories-services.js";
-import { CreateCategory, DeleterCategoryParams } from "../types/categories.js";
+import {
+  CreateCategory,
+  DeleterCategoryParams,
+  UpdateCategory,
+} from "../types/categories.js";
 
 export class CategoryController {
   private categoriesService: CategoriesService;
@@ -56,6 +60,30 @@ export class CategoryController {
           message: error.message,
         });
       }
+      return reply.status(500).send({
+        message: "Internal Server Error",
+      });
+    }
+  }
+
+  async updateCategory(
+    request: FastifyRequest<{ Body: UpdateCategory }>,
+    reply: FastifyReply,
+  ) {
+    try {
+      const data = request.body;
+      await this.categoriesService.updateCategory(data, data.id);
+      return reply.status(200).send("Category Updated Sucessfully");
+    } catch (error) {
+      if (
+        error instanceof Error &&
+        error.message === "Category does not exist"
+      ) {
+        return reply.status(400).send({
+          message: error.message,
+        });
+      }
+
       return reply.status(500).send({
         message: "Internal Server Error",
       });

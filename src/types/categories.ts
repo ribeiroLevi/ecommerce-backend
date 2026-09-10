@@ -6,3 +6,9 @@ export interface CreateCategory {
 export interface DeleterCategoryParams {
   id: string;
 }
+
+export interface UpdateCategory {
+  id: string;
+  name?: string;
+  description?: string;
+}

@@ -4,6 +4,7 @@ import {
   CreateUserBody,
   DeleteUserParams,
   FindUserParams,
+  PatchIdParams,
   UpdateUserParams,
 } from "../types/user.js";
 
@@ -90,12 +91,13 @@ export class UserController {
   }
 
   async updateUser(
-    request: FastifyRequest<{ Body: UpdateUserParams }>,
+    request: FastifyRequest<{ Body: UpdateUserParams; Params: PatchIdParams }>,
     reply: FastifyReply,
   ) {
     try {
       const data = request.body;
-      await this.userService.updateUser(data, data.id);
+      const params = request.params;
+      await this.userService.updateUser(data, params.id);
       return reply.status(200).send("User Updated Sucessfully");
     } catch (error) {
       if (error instanceof Error && error.message == "User does not exist") {
