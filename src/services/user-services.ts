@@ -3,27 +3,17 @@ import { randomUUID } from "node:crypto";
 import argon2 from "argon2";
 
 import { users } from "../database/users.js";
-
-interface UserDTO {
-  name: string;
-  email: string;
-  address: string;
-  adm: boolean;
-  login: string;
-  password: string;
-}
-
-interface UpdateUserDTO {
-  name?: string;
-  email?: string;
-  address?: string;
-  adm?: boolean;
-  login?: string;
-  password?: string;
-}
+import { CreateUserDTO, UpdateUserDTO } from "../types/user.js";
 
 export class UserService {
-  async executeCreate({ name, email, address, adm, login, password }: UserDTO) {
+  async executeCreate({
+    name,
+    email,
+    address,
+    adm,
+    login,
+    password,
+  }: CreateUserDTO) {
     const tempUser = users.find(
       (user) => user.email === email || user.login === login,
     );

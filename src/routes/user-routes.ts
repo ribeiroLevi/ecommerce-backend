@@ -1,5 +1,5 @@
 import { string, z } from "zod";
-import { FastifyTypedInstanc } from "../types.js";
+import { FastifyTypedInstanc } from "../types/fastify.js";
 import { UserController } from "../controllers/user-controller.js";
 
 const userController = new UserController();
@@ -55,13 +55,15 @@ export async function userRoutes(app: FastifyTypedInstanc) {
   );
 
   app.patch(
-    "/user:id",
+    "/user/:id",
     {
       schema: {
         tags: ["users"],
         description: "Atualização de Usuários",
-        body: z.object({
+        params: z.object({
           id: z.uuid(),
+        }),
+        body: z.object({
           name: z.string().optional(),
           email: z.email().optional(),
           address: z.string().optional(),

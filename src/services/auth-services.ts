@@ -1,10 +1,6 @@
 import { users } from "../database/users.js";
 import argon2 from "argon2";
-
-interface LoginValidation {
-  login: string;
-  password: string;
-}
+import { LoginValidation } from "../types/auth.js";
 
 export class AuthService {
   async executeValidate({ login, password }: LoginValidation) {
