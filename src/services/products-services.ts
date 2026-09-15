@@ -1,0 +1,45 @@
+import { randomUUID } from "node:crypto";
+import { products } from "../database/produtcs.js";
+import { CreateProduct } from "../types/product.js";
+
+export class ProductService {
+  async executeCreateProduct({
+    name,
+    description,
+    quantity,
+    picture,
+  }: CreateProduct) {
+    const tempProduct = products.find((product) => product.name === name);
+
+    if (tempProduct) {
+      tempProduct.quantity += quantity;
+      return tempProduct;
+    }
+
+    const newProduct = {
+      id: randomUUID(),
+      name,
+      description,
+      picture,
+      quantity,
+    };
+
+    products.push(newProduct);
+    return newProduct;
+  }
+
+  async executeList() {
+    return products;
+  }
+
+  async deleteProduct(id: string) {
+    const productsPosition = products.findIndex((product) => product.id === id);
+
+    if (productsPosition === -1) {
+      throw new Error("User does not exist");
+    }
+
+    products.splice(productsPosition, 1);
+    return products;
+  }
+}

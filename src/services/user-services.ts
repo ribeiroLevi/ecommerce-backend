@@ -1,4 +1,3 @@
-import { log } from "node:console";
 import { randomUUID } from "node:crypto";
 import argon2 from "argon2";
 

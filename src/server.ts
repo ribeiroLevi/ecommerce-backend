@@ -13,6 +13,7 @@ import { authRoutes } from "./routes/auth-routes.js";
 import { fastifyCookie } from "@fastify/cookie";
 import { fastifySession } from "@fastify/session";
 import { categoryRoutes } from "./routes/categories-routes.js";
+import { productRoutes } from "./routes/products-routes.js";
 
 const app = fastify().withTypeProvider<ZodTypeProvider>();
 
@@ -35,7 +36,7 @@ app.register(fastifySwagger, {
     openapi: "3.0.3",
     info: {
       title: "Eccomerce",
-      version: "0.0.3",
+      version: "0.0.4",
     },
   },
   transform: jsonSchemaTransform,
@@ -53,6 +54,7 @@ app.get("/", () => {
 app.register(userRoutes);
 app.register(authRoutes);
 app.register(categoryRoutes);
+app.register(productRoutes);
 
 app.ready().then(() => {
   console.log(JSON.stringify(app.swagger(), null, 2));
