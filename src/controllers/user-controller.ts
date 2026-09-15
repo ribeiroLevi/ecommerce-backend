@@ -1,32 +1,12 @@
 import { FastifyRequest, FastifyReply } from "fastify";
 import { UserService } from "../services/user-services.js";
-
-interface CreateUserBody {
-  name: string;
-  email: string;
-  address: string;
-  adm: boolean;
-  login: string;
-  password: string;
-}
-
-interface DeleteUserParams {
-  id: string;
-}
-
-interface FindUserParams {
-  login: string;
-}
-
-interface UpdateUserParams {
-  id: string;
-  name?: string;
-  email?: string;
-  address?: string;
-  adm?: boolean;
-  login?: string;
-  password?: string;
-}
+import {
+  CreateUserBody,
+  DeleteUserParams,
+  FindUserParams,
+  PatchIdParams,
+  UpdateUserParams,
+} from "../types/user.js";
 
 export class UserController {
   private userService: UserService;
@@ -111,12 +91,13 @@ export class UserController {
   }
 
   async updateUser(
-    request: FastifyRequest<{ Body: UpdateUserParams }>,
+    request: FastifyRequest<{ Body: UpdateUserParams; Params: PatchIdParams }>,
     reply: FastifyReply,
   ) {
     try {
       const data = request.body;
-      await this.userService.updateUser(data, data.id);
+      const params = request.params;
+      await this.userService.updateUser(data, params.id);
       return reply.status(200).send("User Updated Sucessfully");
     } catch (error) {
       if (error instanceof Error && error.message == "User does not exist") {
