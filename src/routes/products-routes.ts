@@ -28,4 +28,34 @@ export async function productRoutes(app: FastifyTypedInstanc) {
     },
     productController.createProduct.bind(productController),
   );
+
+  app.get(
+    "/products",
+    {
+      schema: {
+        tags: ["Products"],
+        description: "Listagem de Produtos",
+      },
+    },
+    (request, reply) => {
+      return productController.listUser(reply);
+    },
+  );
+
+  app.delete(
+    "/product/:id",
+    {
+      schema: {
+        tags: ["Products"],
+        description: "Deleção de Produtos",
+        params: z.object({ id: z.uuid() }),
+        response: {
+          200: z.object({
+            id: z.string(),
+          }),
+        },
+      },
+    },
+    (request, reply) => productController.deleteProduct(request, reply),
+  );
 }

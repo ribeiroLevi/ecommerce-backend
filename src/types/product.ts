@@ -4,3 +4,7 @@ export interface CreateProduct {
   quantity: number;
   picture: string;
 }
+
+export interface DeleteProductParams {
+  id: string;
+}

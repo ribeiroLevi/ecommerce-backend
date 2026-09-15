@@ -27,4 +27,19 @@ export class ProductService {
     products.push(newProduct);
     return newProduct;
   }
+
+  async executeList() {
+    return products;
+  }
+
+  async deleteProduct(id: string) {
+    const productsPosition = products.findIndex((product) => product.id === id);
+
+    if (productsPosition === -1) {
+      throw new Error("User does not exist");
+    }
+
+    products.splice(productsPosition, 1);
+    return products;
+  }
 }
