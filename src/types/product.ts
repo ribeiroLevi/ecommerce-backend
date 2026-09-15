@@ -1,6 +1,6 @@
 export interface CreateProduct {
   name: string;
   description: string;
-  quantity: string;
+  quantity: number;
   picture: string;
 }
