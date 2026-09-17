@@ -12,7 +12,7 @@ export interface DeleteUserParams {
 }
 
 export interface FindUserParams {
-  login: string;
+  id: string;
 }
 
 export interface UpdateUserParams {

@@ -55,7 +55,7 @@ export class UserController {
   ) {
     try {
       const { id } = request.params;
-      await this.userService.deleteUser(id);
+      await this.userService.executeDelete(id);
       return reply.status(200).send("User Deleted Sucessfully");
     } catch (error) {
       if (error instanceof Error && error.message == "User does not exist") {
@@ -105,7 +105,7 @@ export class UserController {
           message: error.message,
         });
       }
-
+      console.log(error);
       return reply.status(500).send({
         message: "Internal Server Error",
       });
