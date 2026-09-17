@@ -3,6 +3,7 @@ export interface CreateProduct {
   description: string;
   quantity: number;
   picture: string;
+  price: number;
 }
 
 export interface DeleteProductParams {
