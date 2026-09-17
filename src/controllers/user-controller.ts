@@ -76,7 +76,7 @@ export class UserController {
   ) {
     try {
       const data = request.params;
-      const user = await this.userService.findUser(data.login);
+      const user = await this.userService.findUser(data.id);
       return reply.status(200).send(user);
     } catch (error) {
       if (error instanceof Error && error.message == "User does not exist") {
