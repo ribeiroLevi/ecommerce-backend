@@ -1,9 +1,8 @@
 import { randomUUID } from "node:crypto";
 import argon2 from "argon2";
-
-import { users } from "../database/users.js";
 import { CreateUserDTO, UpdateUserDTO } from "../types/user.js";
 
+import { prisma } from "../database/prisma.js";
 export class UserService {
   async executeCreate({
     name,
@@ -13,9 +12,11 @@ export class UserService {
     login,
     password,
   }: CreateUserDTO) {
-    const tempUser = users.find(
-      (user) => user.email === email || user.login === login,
-    );
+    const tempUser = await prisma.users.findFirst({
+      where: {
+        OR: [{ email }, { login }],
+      },
+    });
 
     if (tempUser) {
       if (tempUser.email == email) {
@@ -29,61 +30,88 @@ export class UserService {
 
     const passwordHash = await argon2.hash(password);
 
-    const user = {
-      id: randomUUID(),
-      name,
-      email,
-      address,
-      adm,
-      login,
-      password: passwordHash,
-    };
+    const user = await prisma.users.create({
+      data: { name, email, address, adm, login, password: passwordHash },
+    });
 
-    users.push(user);
     return user;
   }
 
   async executeList() {
-    return users;
+    const users2 = await prisma.users.findMany();
+    return users2;
   }
 
-  async deleteUser(id: string) {
-    const userPosition = users.findIndex((user) => user.id === id);
+  async executeDelete(id: string) {
+    const user = await prisma.users.findUnique({
+      where: {
+        id,
+      },
+    });
 
-    if (userPosition === -1) {
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    await prisma.users.delete({
+      where: {
+        id,
+      },
+    });
+  }
+
+  async findUser(id: string) {
+    const user = await prisma.users.findUnique({
+      where: {
+        id,
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        address: true,
+        login: true,
+        adm: true,
+      },
+    });
+
+    if (!user) {
       throw new Error("User does not exist");
     }
 
-    users.splice(userPosition, 1);
-    return users;
-  }
-
-  async findUser(login: string) {
-    const userPosition = users.findIndex((user) => user.login === login);
-
-    if (userPosition === -1) {
-      throw new Error("User does not exist");
-    }
-
-    const currentUser = users[userPosition];
-
-    return currentUser;
+    return user;
   }
 
   async updateUser(data: UpdateUserDTO, id: string) {
-    const userPosition = users.findIndex((user) => user.id === id);
-    const currentUser = users[userPosition];
+    const user = await prisma.users.findUnique({
+      where: {
+        id,
+      },
+    });
 
-    const updatedUser = {
-      ...currentUser,
-      ...data,
-    };
-
-    if (userPosition === -1) {
+    if (!user) {
       throw new Error("User does not exist");
     }
 
-    users[userPosition] = updatedUser;
+    let passwordHash: string | undefined;
+
+    if (data.password) {
+      passwordHash = await argon2.hash(data.password);
+    }
+
+    const updatedUser = await prisma.users.update({
+      where: {
+        id,
+      },
+      data: {
+        name: data.name,
+        email: data.email,
+        address: data.address,
+        adm: data.adm,
+        login: data.login,
+        password: passwordHash,
+      },
+    });
 
     return updatedUser;
   }

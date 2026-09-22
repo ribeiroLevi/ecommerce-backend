@@ -19,12 +19,12 @@ export async function userRoutes(app: FastifyTypedInstanc) {
   );
 
   app.get(
-    "/user/:login",
+    "/user/:id",
     {
       schema: {
         tags: ["users"],
         description: "Busca um usuário",
-        params: z.object({ login: z.string() }),
+        params: z.object({ id: z.string() }),
         response: {
           200: z.object({
             id: string(),

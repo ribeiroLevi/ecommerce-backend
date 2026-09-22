@@ -8,6 +8,7 @@ export class ProductService {
     description,
     quantity,
     picture,
+    price,
   }: CreateProduct) {
     const tempProduct = products.find((product) => product.name === name);
 
@@ -22,6 +23,7 @@ export class ProductService {
       description,
       picture,
       quantity,
+      price,
     };
 
     products.push(newProduct);
