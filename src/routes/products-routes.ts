@@ -1,4 +1,4 @@
-import z from "zod";
+import z, { string } from "zod";
 import { FastifyTypedInstanc } from "../types/fastify.js";
 import { id } from "zod/locales";
 import { ProductController } from "../controllers/products-controller.js";
@@ -15,8 +15,10 @@ export async function productRoutes(app: FastifyTypedInstanc) {
         body: z.object({
           name: z.string(),
           description: z.string(),
-          quantity: z.string(),
+          quantity: z.number(),
           picture: z.string(),
+          category_id: string(),
+          price: z.number(),
         }),
         response: {
           201: z.object({

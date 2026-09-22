@@ -1,6 +1,10 @@
 import argon2 from "argon2";
-import { LoginValidation } from "../types/auth.js";
 import { prisma } from "../database/prisma.js";
+
+interface LoginValidation {
+  login: string;
+  password: string;
+}
 
 export class AuthService {
   async executeValidate({ login, password }: LoginValidation) {

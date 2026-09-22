@@ -8,7 +8,6 @@ export interface DeleterCategoryParams {
 }
 
 export interface UpdateCategory {
-  id: string;
   name?: string;
   description?: string;
 }

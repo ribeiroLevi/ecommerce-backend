@@ -14,12 +14,15 @@ export class ProductController {
     reply: FastifyReply,
   ) {
     try {
-      const { name, description, quantity, picture } = request.body;
+      const { name, description, quantity, picture, price, category_id } =
+        request.body;
       const product = await this.productService.executeCreateProduct({
         name,
         description,
         quantity,
         picture,
+        price,
+        category_id,
       });
 
       return reply.status(201).send();

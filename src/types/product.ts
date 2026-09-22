@@ -4,6 +4,7 @@ export interface CreateProduct {
   quantity: number;
   picture: string;
   price: number;
+  category_id: string;
 }
 
 export interface DeleteProductParams {
