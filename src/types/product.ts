@@ -10,3 +10,20 @@ export interface CreateProduct {
 export interface DeleteProductParams {
   id: string;
 }
+
+export interface UpdateProductDTO {
+  name?: string;
+  description?: string;
+  quantity?: number;
+  picture?: string;
+  price?: number;
+  category_id?: string;
+}
+
+export interface FindProductParams {
+  id: string;
+}
+
+export interface PatchProductsParams {
+  id: string;
+}

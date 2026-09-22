@@ -40,7 +40,7 @@ export async function productRoutes(app: FastifyTypedInstanc) {
       },
     },
     (request, reply) => {
-      return productController.listUser(reply);
+      return productController.listProducts(reply);
     },
   );
 
@@ -59,5 +59,57 @@ export async function productRoutes(app: FastifyTypedInstanc) {
       },
     },
     (request, reply) => productController.deleteProduct(request, reply),
+  );
+
+  app.get(
+    "/products/:id",
+    {
+      schema: {
+        tags: ["Products"],
+        description: "Busca um produto",
+        params: z.object({ id: z.string() }),
+        response: {
+          200: z.object({
+            id: z.string(),
+            name: z.string(),
+            description: z.string(),
+            price: z.number(),
+            picture: z.string().nullable(),
+            quantity: z.number(),
+            category_id: z.string(),
+          }),
+        },
+      },
+    },
+    (request, reply) => {
+      return productController.findProduct(request, reply);
+    },
+  );
+
+  app.patch(
+    "/product/:id",
+    {
+      schema: {
+        tags: ["Products"],
+        description: "Atualização de Produtos",
+        params: z.object({
+          id: z.uuid(),
+        }),
+        body: z.object({
+          name: z.string().optional(),
+          description: z.string().optional(),
+          quantity: z.number().optional(),
+          picture: z.string().optional(),
+          price: z.number().optional(),
+          category_id: z.string().optional(),
+        }),
+        response: {
+          200: z.object({
+            id: z.string(),
+          }),
+        },
+      },
+    },
+    (request, reply) => productController.updateProduct(request, reply),
   );
 }

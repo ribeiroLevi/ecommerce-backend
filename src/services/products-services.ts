@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto";
 import { products } from "../database/produtcs.js";
-import { CreateProduct } from "../types/product.js";
+import { CreateProduct, UpdateProductDTO } from "../types/product.js";
 import { prisma } from "../database/prisma.js";
 
 export class ProductService {
@@ -55,6 +55,45 @@ export class ProductService {
     });
 
     return product;
+  }
+
+  async findProduct(id: string) {
+    const product = await prisma.products.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!product) {
+      throw new Error("Product does not exist");
+    }
+
+    return {
+      ...product,
+      price: Number(product.price),
+    };
+  }
+
+  async updateProduct(data: UpdateProductDTO, id: string) {
+    const product = await prisma.products.findUnique({
+      where: {
+        id: id,
+      },
+    });
+
+    const updatedProduct = await prisma.products.update({
+      where: {
+        id,
+      },
+      data: {
+        name: data.name,
+        description: data.description,
+        quantity: data.quantity,
+        picture: data.picture,
+        price: data.price,
+        category_id: data.category_id,
+      },
+    });
   }
 
   async executeList() {
