@@ -9,7 +9,7 @@ export async function userRoutes(app: FastifyTypedInstanc) {
     "/user",
     {
       schema: {
-        tags: ["users"],
+        tags: ["Users"],
         description: "Listagem de Usuários",
       },
     },
@@ -22,7 +22,7 @@ export async function userRoutes(app: FastifyTypedInstanc) {
     "/user/:id",
     {
       schema: {
-        tags: ["users"],
+        tags: ["Users"],
         description: "Busca um usuário",
         params: z.object({ id: z.string() }),
         response: {
@@ -41,7 +41,7 @@ export async function userRoutes(app: FastifyTypedInstanc) {
     "/user/:id",
     {
       schema: {
-        tags: ["users"],
+        tags: ["Users"],
         description: "Deleção de Usuários",
         params: z.object({ id: z.uuid() }),
         response: {
@@ -58,7 +58,7 @@ export async function userRoutes(app: FastifyTypedInstanc) {
     "/user/:id",
     {
       schema: {
-        tags: ["users"],
+        tags: ["Users"],
         description: "Atualização de Usuários",
         params: z.object({
           id: z.uuid(),
@@ -85,7 +85,7 @@ export async function userRoutes(app: FastifyTypedInstanc) {
     "/user",
     {
       schema: {
-        tags: ["users"],
+        tags: ["Users"],
         description: "Criação de Usuário",
         body: z.object({
           name: z.string(),

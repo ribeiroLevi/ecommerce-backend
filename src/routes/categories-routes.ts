@@ -13,7 +13,7 @@ export async function categoryRoutes(app: FastifyTypedInstanc) {
     "/category",
     {
       schema: {
-        tags: ["category"],
+        tags: ["Category"],
         description: "Lista as Categorias Disponíveis",
       },
     },
@@ -26,7 +26,7 @@ export async function categoryRoutes(app: FastifyTypedInstanc) {
     "/category/:id",
     {
       schema: {
-        tags: ["category"],
+        tags: ["Category"],
         description: "Deleção de Categorias",
         params: z.object({ id: z.uuid() }),
         response: {
@@ -43,7 +43,7 @@ export async function categoryRoutes(app: FastifyTypedInstanc) {
     "/category/:id",
     {
       schema: {
-        tags: ["category"],
+        tags: ["Category"],
         description: "Atualiza uma Categoria",
         params: z.object({
           id: z.uuid(),
@@ -67,7 +67,7 @@ export async function categoryRoutes(app: FastifyTypedInstanc) {
     "/category",
     {
       schema: {
-        tags: ["category"],
+        tags: ["Category"],
         description: "Criação de Categoria",
         body: z.object({
           name: z.string(),
