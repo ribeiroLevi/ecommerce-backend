@@ -2,6 +2,7 @@ import z, { string } from "zod";
 import { FastifyTypedInstanc } from "../types/fastify.js";
 import { id } from "zod/locales";
 import { ProductController } from "../controllers/products-controller.js";
+import { requireAuth } from "../middleware/auth-middleware.js";
 
 export async function productRoutes(app: FastifyTypedInstanc) {
   const productController = new ProductController();
@@ -32,7 +33,7 @@ export async function productRoutes(app: FastifyTypedInstanc) {
   );
 
   app.get(
-    "/products",
+    "/product",
     {
       schema: {
         tags: ["Products"],
@@ -47,6 +48,7 @@ export async function productRoutes(app: FastifyTypedInstanc) {
   app.delete(
     "/product/:id",
     {
+      preHandler: requireAuth,
       schema: {
         tags: ["Products"],
         description: "Deleção de Produtos",
@@ -62,7 +64,7 @@ export async function productRoutes(app: FastifyTypedInstanc) {
   );
 
   app.get(
-    "/products/:id",
+    "/product/:id",
     {
       schema: {
         tags: ["Products"],
