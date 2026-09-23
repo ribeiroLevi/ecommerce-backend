@@ -16,6 +16,7 @@ import { fastifyCookie } from "@fastify/cookie";
 import { fastifySession } from "@fastify/session";
 import { categoryRoutes } from "./routes/categories-routes.js";
 import { productRoutes } from "./routes/products-routes.js";
+import { saleRoutes } from "./routes/sale-routes.js";
 
 const app = fastify().withTypeProvider<ZodTypeProvider>();
 
@@ -57,6 +58,7 @@ app.register(userRoutes);
 app.register(authRoutes);
 app.register(categoryRoutes);
 app.register(productRoutes);
+app.register(saleRoutes);
 
 app.ready().then(() => {
   console.log(JSON.stringify(app.swagger(), null, 2));
