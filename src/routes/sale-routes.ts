@@ -6,6 +6,18 @@ import { SalesController } from "../controllers/sale-controller.js";
 export async function saleRoutes(app: FastifyTypedInstanc) {
   const salesController = new SalesController();
 
+  app.get(
+    "/sale/me",
+    {
+      preHandler: requireAuth,
+      schema: {
+        tags: ["Sales"],
+        description: "Retorna as compras do usuário logado",
+      },
+    },
+    salesController.listUserSales.bind(salesController),
+  );
+
   app.post(
     "/sale",
     {

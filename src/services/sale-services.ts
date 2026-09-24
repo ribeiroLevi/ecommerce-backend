@@ -7,8 +7,24 @@ interface CreateSaleService {
 }
 
 export class SaleService {
+  async getUserSales(userId: string) {
+    const sales = await prisma.sales.findMany({
+      where: {
+        user_id: userId,
+      },
+      include: {
+        sale_products: {
+          include: {
+            products: true,
+          },
+        },
+      },
+    });
+
+    return sales;
+  }
+
   async executeCreateSale({ userId, products }: CreateSaleService) {
-    // Primeiro valida todos os produtos e seus estoques
     for (const item of products) {
       const product = await prisma.products.findUnique({
         where: {

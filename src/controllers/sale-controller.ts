@@ -26,4 +26,18 @@ export class SalesController {
       return reply.status(500).send({ message: "Internal Server Error" });
     }
   }
+
+  async listUserSales(request: FastifyRequest, reply: FastifyReply) {
+    const userId = request.session.userId;
+
+    if (!userId) {
+      return reply.status(401).send({
+        message: "Unauthorized",
+      });
+    }
+
+    const products = await this.salesService.getUserSales(userId);
+
+    return reply.status(200).send(products);
+  }
 }
