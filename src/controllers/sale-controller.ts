@@ -1,5 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { CreateSale } from "../types/sales.js";
+import { CreateSale, DeleteSaleParams } from "../types/sales.js";
 import { SaleService } from "../services/sale-services.js";
 
 export class SalesController {
@@ -28,16 +28,36 @@ export class SalesController {
   }
 
   async listUserSales(request: FastifyRequest, reply: FastifyReply) {
-    const userId = request.session.userId;
-
-    if (!userId) {
-      return reply.status(401).send({
-        message: "Unauthorized",
-      });
-    }
+    const userId = request.session.userId!;
 
     const products = await this.salesService.getUserSales(userId);
 
     return reply.status(200).send(products);
+  }
+
+  async listAllSales(request: FastifyRequest, reply: FastifyReply) {
+    const sales = await this.salesService.listAllSales();
+    return reply.status(200).send(sales);
+  }
+
+  async deleteSale(
+    request: FastifyRequest<{ Params: DeleteSaleParams }>,
+    reply: FastifyReply,
+  ) {
+    try {
+      const { id } = request.params;
+      await this.salesService.deleteSale(id);
+      return reply.status(200).send("Sale Deleted Sucessfully");
+    } catch (error) {
+      if (error instanceof Error && error.message == "Sale not ") {
+        return reply.status(404).send({
+          message: error.message,
+        });
+      }
+
+      return reply.status(500).send({
+        message: "Internal Server Error",
+      });
+    }
   }
 }

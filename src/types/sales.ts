@@ -6,3 +6,7 @@ export interface SaleProduct {
 export interface CreateSale {
   products: SaleProduct[];
 }
+
+export interface DeleteSaleParams {
+  id: string;
+}

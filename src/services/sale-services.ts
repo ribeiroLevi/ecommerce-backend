@@ -1,5 +1,6 @@
 import { SaleProduct } from "../types/sales.js";
 import { prisma } from "../database/prisma.js";
+import { productRoutes } from "../routes/products-routes.js";
 
 interface CreateSaleService {
   userId: string;
@@ -22,6 +23,37 @@ export class SaleService {
     });
 
     return sales;
+  }
+
+  async listAllSales() {
+    const salesDB = await prisma.sales.findMany();
+    return salesDB;
+  }
+
+  async deleteSale(saleId: string) {
+    const sale = await prisma.sales.findUnique({
+      where: {
+        id: saleId,
+      },
+    });
+
+    if (!sale) {
+      throw new Error("Sale not found");
+    }
+
+    await prisma.$transaction(async (tx) => {
+      await tx.sale_products.deleteMany({
+        where: {
+          sale_id: saleId,
+        },
+      });
+
+      await tx.sales.delete({
+        where: {
+          id: saleId,
+        },
+      });
+    });
   }
 
   async executeCreateSale({ userId, products }: CreateSaleService) {
