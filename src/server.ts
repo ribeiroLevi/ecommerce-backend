@@ -18,7 +18,23 @@ import { categoryRoutes } from "./routes/categories-routes.js";
 import { productRoutes } from "./routes/products-routes.js";
 import { saleRoutes } from "./routes/sale-routes.js";
 
+import multipart from "@fastify/multipart";
+import fastifyStatic from "@fastify/static";
+import path from "node:path";
+
 const app = fastify().withTypeProvider<ZodTypeProvider>();
+
+await app.register(multipart, {
+  attachFieldsToBody: "keyValues",
+  limits: {
+    fileSize: 5 * 1024 * 1024,
+  },
+});
+
+await app.register(fastifyStatic, {
+  root: path.join(process.cwd(), "uploads"),
+  prefix: "/uploads/",
+});
 
 app.setValidatorCompiler(validatorCompiler);
 app.setSerializerCompiler(serializerCompiler);
@@ -39,7 +55,7 @@ app.register(fastifySwagger, {
     openapi: "3.0.3",
     info: {
       title: "Ecommerce",
-      version: "0.0.6",
+      version: "1.0.0",
     },
   },
   transform: jsonSchemaTransform,

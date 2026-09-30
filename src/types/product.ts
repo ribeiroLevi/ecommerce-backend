@@ -1,3 +1,5 @@
+import z from "zod";
+
 export interface CreateProduct {
   name: string;
   description: string;
@@ -27,3 +29,11 @@ export interface FindProductParams {
 export interface PatchProductsParams {
   id: string;
 }
+
+export const createProductSchema = z.object({
+  name: z.string().min(1),
+  description: z.string().min(1),
+  quantity: z.coerce.number().int().positive(),
+  price: z.coerce.number().positive(),
+  category_id: z.uuid(),
+});

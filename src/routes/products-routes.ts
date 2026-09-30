@@ -1,4 +1,4 @@
-import z, { string } from "zod";
+import z from "zod";
 import { FastifyTypedInstanc } from "../types/fastify.js";
 import { ProductController } from "../controllers/products-controller.js";
 import { requireAuth } from "../middleware/auth-middleware.js";
@@ -12,14 +12,22 @@ export async function productRoutes(app: FastifyTypedInstanc) {
       schema: {
         tags: ["Products"],
         description: "Cria um novo produto",
+
+        consumes: ["multipart/form-data"],
+
         body: z.object({
           name: z.string(),
           description: z.string(),
-          quantity: z.number(),
-          picture: z.string(),
-          category_id: string(),
-          price: z.number(),
+          quantity: z.coerce.number(),
+          price: z.coerce.number(),
+          category_id: z.uuid(),
+
+          picture: z.instanceof(Buffer).meta({
+            type: "string",
+            format: "binary",
+          }),
         }),
+
         response: {
           201: z.object({
             id: z.uuid(),
@@ -30,7 +38,6 @@ export async function productRoutes(app: FastifyTypedInstanc) {
     },
     productController.createProduct.bind(productController),
   );
-
   app.get(
     "/product",
     {

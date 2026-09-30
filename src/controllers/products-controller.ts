@@ -6,7 +6,11 @@ import {
   FindProductParams,
   PatchProductsParams,
   UpdateProductDTO,
+  createProductSchema,
 } from "../types/product.js";
+import { mkdir, writeFile } from "node:fs/promises";
+import path from "node:path";
+import crypto from "node:crypto";
 
 export class ProductController {
   private productService: ProductService;
@@ -15,26 +19,41 @@ export class ProductController {
     this.productService = new ProductService();
   }
 
-  async createProduct(
-    request: FastifyRequest<{ Body: CreateProduct }>,
-    reply: FastifyReply,
-  ) {
-    try {
-      const { name, description, quantity, picture, price, category_id } =
-        request.body;
-      const product = await this.productService.executeCreateProduct({
-        name,
-        description,
-        quantity,
-        picture,
-        price,
-        category_id,
-      });
+  async createProduct(request: FastifyRequest, reply: FastifyReply) {
+    const { name, description, quantity, price, category_id, picture } =
+      request.body as {
+        name: string;
+        description: string;
+        quantity: number;
+        price: number;
+        category_id: string;
+        picture: Buffer;
+      };
 
-      return reply.status(201).send();
-    } catch (error) {
-      return reply.status(500).send({ message: "Internal Server Error" });
-    }
+    const uploadDirectory = path.join(process.cwd(), "uploads", "products");
+
+    await mkdir(uploadDirectory, {
+      recursive: true,
+    });
+
+    const filename = `${crypto.randomUUID()}.jpg`;
+
+    const filePath = path.join(uploadDirectory, filename);
+
+    await writeFile(filePath, picture);
+
+    const picturePath = `/uploads/products/${filename}`;
+
+    const product = await this.productService.executeCreateProduct({
+      name,
+      description,
+      quantity,
+      price,
+      category_id,
+      picture: picturePath,
+    });
+
+    return reply.status(201).send(product);
   }
 
   async listProducts(reply: FastifyReply) {

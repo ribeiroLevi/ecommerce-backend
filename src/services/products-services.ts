@@ -1,5 +1,3 @@
-import { randomUUID } from "node:crypto";
-import { products } from "../database/produtcs.js";
 import { CreateProduct, UpdateProductDTO } from "../types/product.js";
 import { prisma } from "../database/prisma.js";
 
