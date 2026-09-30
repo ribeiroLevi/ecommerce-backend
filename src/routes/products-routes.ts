@@ -1,6 +1,5 @@
 import z, { string } from "zod";
 import { FastifyTypedInstanc } from "../types/fastify.js";
-import { id } from "zod/locales";
 import { ProductController } from "../controllers/products-controller.js";
 import { requireAuth } from "../middleware/auth-middleware.js";
 
